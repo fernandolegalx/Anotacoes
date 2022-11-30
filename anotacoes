@@ -1,0 +1,27 @@
+Programação funcional com Java
+
+//// Função anonima
+Runnable r = new Runnable() {
+     public void run() {
+          System.out.println("Thread com classer interna!");
+     }
+};
+new Thread(r).start();
+
+/////Laço for 
+
+System.out.println("Imprime todos os elementos da lista!");
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+for(Integer n: list) {
+    System.out.println(n);
+}
+
+/////ForEach
+
+System.out.println("Imprime todos os elementos pares da lista!");
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+list.forEach(n -> {
+       if (n % 2 == 0) {
+             System.out.println(n);
+       }
+});

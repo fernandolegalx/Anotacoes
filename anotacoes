@@ -52,3 +52,23 @@ public class Consumidor extends Função {
 	}
 
 }
+
+
+---> Utilização do BinaryOperator 
+[+]---------------------------------------------------------------------------------------------------[+]
+"representa um operador binário que pega dois operandos e opera sobre eles para produzir um resultado.
+No entanto, o que o distingue de um BiFunciton normal é que ambos os argumentos e o tipo de retorno são iguais."
+[+]---------------------------------------------------------------------------------------------------[+]
+		BinaryOperator<Double> media = 
+				(n1, n2) -> (n1 + n2) / 2;
+				/////////
+		BiFunction<Double, Double, String> resultado = 
+				(n1, n2) -> {
+					double notaFinal = (n1 + n2) /2;
+					return notaFinal >= 7 ? "Aprovado" : "Reprovado";
+				};
+				System.out.printf("your endpoint is\n"
+						+ ": ");
+				System.out.println(resultado.apply(9.7, 5.1));
+				
+[+]-----------------------------------------------------------------------------------------------------[+]

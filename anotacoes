@@ -1,4 +1,5 @@
-Programação funcional com Java
++Programação funcional com Java+
+
 
 //// Função anonima
 Runnable r = new Runnable() {

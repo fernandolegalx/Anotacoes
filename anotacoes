@@ -8,7 +8,7 @@ Runnable r = new Runnable() {
 };
 new Thread(r).start();
 
-/////Laço for 
+---> Utilizando laço de repetição
 
 System.out.println("Imprime todos os elementos da lista!");
 List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
@@ -16,7 +16,7 @@ for(Integer n: list) {
     System.out.println(n);
 }
 
-/////ForEach
+-----> Utilização do forEach
 
 System.out.println("Imprime todos os elementos pares da lista!");
 List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
@@ -25,3 +25,30 @@ list.forEach(n -> {
              System.out.println(n);
        }
 });
+
+
+---> Utilizando o consumer
+
+public class Consumidor extends Função {
+	public static void main(String[] args) {
+		Consumer<Produto> imprimir 
+		= p -> System.out.println(p.nome);
+		
+		Produto p1 = new Produto("Caneta", 12.34, 0.10);
+		imprimir.accept(p1);
+		
+		
+		Produto p2 = new Produto("Notebook", 1000.00, 0.10);
+		Produto p3 = new Produto("Conhecimento", 240.00, 0.10);
+		Produto p4 = new Produto("Teste", 150.00, 0.10);
+		Produto p5 = new Produto("Carro", 600.00, 0.10);
+
+
+		
+		List<Produto> produtos = Arrays.asList(p1,p2,p3,p4,p5);
+		produtos.forEach(imprimir);
+		produtos.forEach(p -> System.out.println("Preco = " + p.preco));
+		produtos.forEach(System.out::println);
+	}
+
+}

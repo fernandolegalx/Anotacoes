@@ -73,3 +73,121 @@ No entanto, o que o distingue de um BiFunciton normal é que ambos os argumentos
 				System.out.println(resultado.apply(9.7, 5.1));
 				
 [+]-----------------------------------------------------------------------------------------------------[+]
+
+
+
+
+Streams API
+
+[+]----------------------------------------------------------------------------------------[+]
+
+----> Utilização da função Match
+
+public class Match {
+	public static void main(String[] args) {
+		Aluno a1 = new Aluno("Ana", 7.1);
+		Aluno a2 = new Aluno("Pedro", 8.1);
+		Aluno a3 = new Aluno("Sab", 7.1);
+		Aluno a4 = new Aluno("João", 8.1);
+
+		List<Aluno> alunos = Arrays.asList(a1, a2, a3, a4);
+		Predicate<Aluno> aprovado = a -> a.nota >= 7;
+		Predicate<Aluno> reprovado = aprovado.negate();
+
+		
+		System.out.println(alunos.stream().allMatch(aprovado));
+		System.out.println(alunos.stream().anyMatch(aprovado));
+
+
+	}
+}
+
+-----> Utilização do reduce
+
+public class Reduce1 {
+	public static void main(String[] args) {
+		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8,9);
+		
+		BinaryOperator<Integer> soma = (ac, n) -> ac + n;
+		
+		Integer total1 = nums.stream().reduce(soma).get();
+		System.out.println(total1);
+		
+		Integer total2 = nums.parallelStream().reduce(100, soma);
+		System.out.println(total2);
+		
+		nums.stream()
+			.filter(n -> n > 5)
+			.reduce(soma)
+			.ifPresent(System.out::println);
+		}
+}
+
+----------> Utilização do takeWhile
+
+public class Outro {
+	public static void main(String[] args) {
+		Aluno a1 = new Aluno("Ana", 7.1);
+		Aluno a2 = new Aluno("Pedro", 8.1);
+		Aluno a3 = new Aluno("Sab", 7.1);
+		Aluno a4 = new Aluno("João", 8.1);
+		Aluno a5 = new Aluno("Ana", 7.1);
+		Aluno a6 = new Aluno("Pedro", 8.1);
+		Aluno a7 = new Aluno("Luiz", 7.1);
+		Aluno a8 = new Aluno("João", 8.1);
+		
+		List<Aluno> alunos = Arrays.asList(a1, a2, a3, a4, a5, a6, a7, a8);
+		System.out.println("distinct...");
+		alunos.stream().distinct().forEach(System.out::println);
+		System.out.println("\nSkip/Limit");
+		alunos.stream()
+			.distinct()
+			.skip(2)
+			.limit(2)
+			.forEach(System.out::println);
+		
+		System.out.println("takeWhile...");
+		alunos.stream()
+			.distinct()
+			.skip(2)
+			.takeWhile(a -> a.nota >= 7)
+			.limit(2)
+			.forEach(System.out::println);
+	}
+}
+
+
+
+-----> Utilizando Min  & Max
+
+	public static void main(String[] args) {
+		Aluno a1 = new Aluno("Ana", 7.1);
+		Aluno a2 = new Aluno("Pedro", 8.1);
+		Aluno a3 = new Aluno("Sab", 7.1);
+		Aluno a4 = new Aluno("João", 8.1);
+		
+		List<Aluno> alunos = Arrays.asList(a1,a2,a3,a4);
+		Comparator<Aluno> melhorNota = (aluno1, aluno2) -> {
+			
+			if(aluno1.nota > aluno2.nota) return 1;
+			if(aluno1.nota < aluno2.nota) return -1;
+			return 0;
+			 
+		};	
+		
+		Comparator<Aluno> piorNota = (aluno1, aluno2) -> {
+			
+			if(aluno1.nota > aluno2.nota) return -1;
+			if(aluno1.nota < aluno2.nota) return 1;
+			return 0;
+			 
+		};	
+		
+		System.out.println(alunos.stream().max(melhorNota).get());
+		System.out.println(alunos.stream().min(melhorNota).get());
+		System.out.println(alunos.stream().max(piorNota).get());
+
+	}
+}
+
+

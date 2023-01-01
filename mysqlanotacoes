@@ -1,1 +1,151 @@
 
+
+[+]--------------------------------------------------------------[+]
+Criação de tabelas 01 SQL
+[+]---------------------------------------------------------[+]
+
+create table estados (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+    nome VARCHAR(45) NOT NULL,
+    sigla VARCHAR(2) NOT NULL,
+    regiao ENUM('Norte','Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul') NOT NULL,
+    populacao DECIMAL(5,2) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (nome),
+    UNIQUE KEY (sigla)
+);
+
+[+]--------------------------------------------------------------[+]
+Inserindo estados na tabela 02 SQL
+[+]------------------------------------------------------------[+]
+INSERT INTO estados 
+    (nome, sigla, regiao, populacao)
+VALUES
+    ('Acre', 'AC', 'Norte', 0.83);
+
+INSERT INTO estados
+    (nome, sigla, regiao, polulacao)
+VALUES
+    ('Alagoas', 'AL', 'Nordeste', 3.38),
+    ('Amapá', 'AP', 'Norte', 0.8),
+    ('Amazonas', 'AM', 'Norte', 4.06),
+    ('Bahia', 'BA', 'Nordeste', 15.34),
+    ('Ceará', 'CE', 'Nordeste', 9.02),
+    ('Distrito Federal', 'DF', 'Centro-Oeste', 3.04),
+    ('Espírito Santo', 'ES', 'Sudeste', 4.02),
+    ('Goiás', 'GO', 'Centro-Oeste', 6.78),
+    ('Maranhao', 'MA', 'Nordeste', 7.00),
+    ('Mato Grosso', 'MT', 'Centro-Oeste', 3.34),
+    ('Mato Grosso do Sul', 'MS', 'Centro-Oeste', 2.71),
+    ('Minas Gerais', 'MG', 'Sudeste', 21.12),
+    ('Pará', 'PA', 'Norte', 8.36),
+    ('Paraíba', 'PB', 'Nordeste', 4.03),
+    ('Parana', 'PR', 'Sul', 11.22),
+    ('Pernambuco', 'PE', 'Nordeste', 9.47),
+    ('Piauí', 'PI', 'Nordeste', 3.22),
+    ('Rio de Janeiro', 'RJ', 'Sudeste', 16.72),
+    ('Rio Grande do Norte', 'RN', 'Nordeste', 3.51),
+    ('Rio Grande do Sul', 'RS', 'Sul', 11.32),
+    ('Rondônia', 'RO', 'Norte', 1.81),
+    ('Roraima', 'RR', 'Norte', 0.52),
+    ('Santa Catarina', 'SC', 'Sul', 7.01),
+    ('São Paulo', 'SP', 'Sudeste', 45.10),
+    ('Sergipe', 'SE', 'Nordeste', 2.29),
+    ('Tocantins', 'TO', 'Norte', 1.55);
+
+[+]--------------------------------------------------------------[+]
+ConsultarEstados 03 SQL 
+[+]--------------------------------------------------------------[+]
+select * from estados
+
+	select sigla,
+		nome as 'Nome do Estado'  
+	from estados
+	where regiao = 'sul'
+
+	select
+	     nome, 
+	     regiao 
+	     populacao
+	from estados
+	where polulacao >= 10
+	order by polulacao desc
+[+]--------------------------------------------------[+]
+Atualizando Tabelas 04 SQL
+[+]-----------------------------------------------------[+]
+
+update estados
+set nome = 'Paraná', populacao = 11.32
+where sigla = 'PR'
+
+select est.nome,
+    sigla,
+    populacao
+from estados est
+where sigla = 'PR'
+
+[+]------------------------------------------------------[+]
+Inserindo novos estados 05 SQL
+[+]-------------------------------------------------------[+]
+
+insert into estados (id, nome, sigla, regiao, populacao)
+values (1000, 'Novo', 'NV', 'Sul', 2.54)
+
+select * from estados
+
+insert into estados (nome, sigla, regiao, populacao)
+values ('Mais Novo', 'MN', 'Norte', 2.51)
+
+
+[+]------------------------------------------------------------[+]
+Excluindo estados 06 SQL
+[+]-----------------------------------------------------------[+]
+
+delete from estados 
+where sigla = 'NV'
+
+select * from estados
+
+delete from estados 
+where id >= 1000
+
+[+]---------------------------------------------------------------[+]
+Consultando estados 07 SQL
+[+]----------------------------------------------------------------[+]
+
+select 
+    regiao as 'Região',
+    sum(populacao) as Total
+from estados
+group by regiao
+order by Total desc
+
+select 
+    avg(populacao) as Total
+from estados
+
+[+]---------------------------------------------------------------------[+]
+Criar tabela cidades 08 SQL
+[+]--------------------------------------------------------------------[+]
+
+create table if not exists cidades (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    estado_id int unsigned NOT NULL,
+    area DECIMAL(10,2),
+    PRIMARY KEY(id),
+    FOREIGN KEY (estado_id) REFERENCES estados (id)
+);
+
+
+create table if not exists testes (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
+drop table if exists testes;
+
+
+
+
+
+

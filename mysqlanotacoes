@@ -1,5 +1,4 @@
 
-
 [+]--------------------------------------------------------------[+]
 Criação de tabelas 01 SQL
 [+]---------------------------------------------------------[+]
@@ -144,8 +143,63 @@ create table if not exists testes (
 
 drop table if exists testes;
 
+[+]---------------------------------------------------------------------[+]
+Criando tabela empresa 09 [IMPORTANTE]
+[+]---------------------------------------------------------------------[+]
+
+create table if not exists empresas (
+    id int unsigned not null auto_increment,
+    nome varchar(255) not null,
+    cnpj int unsigned,
+    primary key (id),
+    unique key (cnpj)
+);
+
+-- cidades_empresas
+
+create table if not exists empresas_unidades (
+    empresa_id int unsigned not null,
+    cidade_id int unsigned not null,
+    sede tinyint(1) not null,
+    primary key (empresa_id, cidade_id)
+);
+
+[+]--------------------------------------------------------------------[+]
+Inserindo empresas 10[IMPORTANTE]
+[+]---------------------------------------------------------------------[+]
+alter table empresas modify cnpj varchar(14);
+
+insert into empresas
+    (nome, cnpj)
+values
+    ('Bradesco', 6465465465645),
+    ('Vale', 6465465445),
+    ('Cielo', 46546546464);
 
 
+desc `empresas`;
+desc `prefeitos`;
 
+select * from `empresas`;
+select * from `cidades`;
+
+insert into `empresas_unidades`
+    (empresa_id, cidade_id, sede)
+values
+    (1, 1, 1),
+    (1, 2, 0),
+    (2, 1, 0),
+    (2, 2, 1);
+
+[+]----------------------------------------------------------------------[+]
+Consultando Empresas 11[IMPORTANTE]
+[+]-----------------------------------------------------------------------[+]
+
+select e.nome Empresa, c.nome Cidade
+from empresas e, empresas_unidades eu, cidades c
+
+where e.id = eu.empresa_id
+and c.id = eu.cidade_id
+and sede = 1
 
 

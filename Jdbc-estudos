@@ -1,0 +1,266 @@
+[+]-------------------------------------------------------------------------[+]
+01 Criando conexão com jdbc
+[+]-------------------------------------------------------------------------[+]
+
+public class TesteConexao {
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://localhost?verifyServerCertificate=false&useSSL=true";
+        String usuario = "root";
+        String senha = "ferlindo";
+
+        Connection conexao = DriverManager
+                .getConnection(url, usuario, senha);
+
+        System.out.println("Conexão efetuada com sucesso!");
+        conexao.close();
+    }
+}
+
+[+]----------------------------------------------------------------------------[+]
+02 Criando banco de dados com JDBC
+[+]----------------------------------------------------------------------------[+]
+
+public class criarBanco {
+	public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://localhost?verifyServerCertificate=false&useSSL=true";
+        String usuario = "root";
+        String senha = "ferlindo";
+
+        Connection conexao = DriverManager
+                .getConnection(url, usuario, senha);
+        
+        Statement stmt = conexao.createStatement();
+        stmt.execute("create database if not exists curso_java");
+        
+        System.out.println("Banco criado com sucesso");
+        conexao.close();
+	}
+}
+
+[+]----------------------------------------------------------------------------[+]
+03 Fabrica de Conexao
+[+]----------------------------------------------------------------------------[+]
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class FabricaConexao{
+	public static Connection getConexao() {
+	try {
+		final String url = "jdbc:mysql://localhost?verifyServerCertificate=false&useSSL=true";
+		final String user = "root";
+		final String pass = "ferlindo";
+		
+		return DriverManager.getConnection(url, user, pass);
+	}catch(SQLException e){
+		throw new RuntimeException(e);
+		}
+	}
+}
+
+[+]-----------------------------------------------------------------------------------[+]
+04 Criando tabela pessoas dentro do banco de dados Java_Web
+[+]------------------------------------------------------------------------------------[+]
+
+package JavaWeb;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class CriarTabelaPessoa {
+	public static void main(String[] args) throws SQLException {
+		Connection conexao = FabricaConexao.getConexao();
+		String sql = "CREATE TABLE IF NOT EXISTS pessoas ("
+				+ "codigo INT AUTO_INCREMENT PRIMARY KEY,"
+				+ "nome VARCHAR(80) NOT NULL"
+				+ ")";
+		
+		Statement stmt = conexao.createStatement();
+		stmt.execute(sql);
+		
+		System.out.println("Tabela criada com sucesso!");
+		conexao.close();
+	}
+}
+
+
+[+]----------------------------------------------------------------------------------------------[+]
+05 Inserindo Registro
+[+]-----------------------------------------------------------------------------------------------[+]
+
+package JavaWeb;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class NovaPessoa {
+	public static void main(String[] args) throws SQLException {
+		Scanner entrada = new Scanner(System.in);
+		
+		System.out.print("Informe o nome: ");
+		String nome = entrada.nextLine();
+		
+		Connection conexao = FabricaConexao.getConexao();
+		
+		String sql = "INSERT INTO pessoas(nome) VALUES (?)";
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+		stmt.setString(1, nome);		
+		
+		stmt.execute();
+		
+		System.out.println("Pessoa incluida com sucesso");
+		entrada.close();
+			
+	}
+}
+
+[+]--------------------------------------------------------------------------------------------[+]
+06 Fazendo consulta no banco de dados utilizando jdbc
+[+]--------------------------------------------------------------------------------------------[+]
+
+>>>> ///Construtor para realizar a ação logo abaixo
+(-)----------------------------------------(-)
+package JavaWeb;
+
+public class Pessoa {
+	private int codigo;
+	private String nome;
+	
+	
+	
+	public Pessoa(int codigo, String nome) {
+		super();
+		this.codigo = codigo;
+		this.nome = nome;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+}
+
+(-)----------------------------------------(-)
+
+
+>>>>>///Codigo em Java para fazer a realização das consultas
+
+package JavaWeb;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConsultarPessoas1 {
+	public static void main(String[] args) throws SQLException {
+		Connection conexao = FabricaConexao.getConexao();
+		String sql = "SELECT * FROM pessoas";
+		
+		Statement stmt = conexao.createStatement();
+		ResultSet resultado = stmt.executeQuery(sql);
+		
+		List<Pessoa> pessoas = new ArrayList<>();
+		
+		while(resultado.next()) {
+			int codigo = resultado.getInt("codigo") ;
+			String nome = resultado.getString("nome");
+			pessoas.add(new Pessoa(codigo, nome));
+		}
+		
+		for(Pessoa p: pessoas) {
+			System.out.println(p.getCodigo() + "==>" + p.getNome());
+		}
+		stmt.close();
+		conexao.close();
+	}
+}
+
+[+]----------------------------------------------------------------------------------------[+]
+07 Desafio Consulta Utilizando like
+[+]----------------------------------------------------------------------------------------[+]
+>>>> ///Construtor para realizar a ação logo abaixo
+(-)----------------------------------------(-)
+package JavaWeb;
+
+public class Pessoa {
+	private int codigo;
+	private String nome;
+	
+	
+	
+	public Pessoa(int codigo, String nome) {
+		super();
+		this.codigo = codigo;
+		this.nome = nome;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+}
+
+(-)----------------------------------------(-)
+>>>>>>>>/// Desafio
+	public static void main(String[] args) throws SQLException {
+		Scanner entrada = new Scanner(System.in);
+
+		Connection conexao = FabricaConexao.getConexao();
+		String sql = "SELECT * FROM pessoas WHERE nome like ?";
+
+		System.out.println("Informe o valor para pesquisa: ");
+		String pesquisa = entrada.nextLine();
+		;
+
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+		stmt.setString(1, "%" + pesquisa + "%");
+		ResultSet resultado = stmt.executeQuery();
+
+		List<Pessoa> pessoas = new ArrayList<>();
+
+		while (resultado.next()) {
+			int codigo = resultado.getInt("codigo");
+			String nome = resultado.getString("nome");
+			pessoas.add(new Pessoa(codigo, nome));
+		}
+
+		for (Pessoa p : pessoas) {
+			System.out.println(p.getCodigo() + "==>" + p.getNome());
+		}
+		stmt.close();
+		conexao.close();
+		entrada.close();
+	}
+
+

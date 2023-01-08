@@ -1,0 +1,119 @@
+security notes
+
+Banner grabbing HTTP [NETCAT]
+
+1° Passo: 
+	nc -v testphp.vulnweb.com 443
+2° Passo:
+	HEAD / HTTP/1.0
+
+Banner grabbing HTTPS [OPENSSL]
+
+1° Passo:
+	openssl s_client -quiet -connec www.itau.com.br:443
+2°Passo:
+	HEAD /HTTP/1.0
+	Host: www.itau.com.br
+
+
+Enumerando Netbios e SMB
+
+NETBIOS | Server Message Block
+
+	 Protocolo para compartilhamento de arquivos.
+	 Porta 139 (NETBIOS) & porta 445 (SMB)
+
+NULL SESSION
+	
+	Sessão Criada sem autenticação de usuario e senha.
+
+IPC$ 
+
+	Permite que usuários anônimos executem determinadas atividades
+	
+- Considerando um conteudo inutil eu só assisti KKKKK
+c
+Enumeração automatizada [ENUM4LINUX]
+	
+	enum4linux -a 192.168.18.2 (Sempre colocar a rede/dominio)
+	
+Enumeração com nmap [NMAP]
+	[!!!!CONTEUDO VALIOSO!!!!]
+	1°Passo: Procurar o diretório dos scripts
+	
+		cd /usr/share/nmap/script
+		
+	2°Passo: Enumerar
+		
+		nmap -v --script=smb* 192.168.18.1
+
+
+Enumenrando snmp [SNMP-CHECK]
+	snmp-check -t 192.168.18.5
+
+Enumerando Mysql [MYSQL]
+	1°Passo:
+		nmap -v --open -sS -p 3306 -Pn 192.168.18.0/24
+	2°Passo:
+		sqlmap -h 192.168.18.157 -u root
+			
+		- A partir dai é só usar os comandos MYSQL	
+
+
+
+HACKFLAG
+
+Info [NIKTO]
+
+nikto -h https://192.168.15.154
+
+Busca com script [NMAP]
+
+nmap -v -T5 -sV 192.168.1.1-192.168.18.20 --vuln --script
+
+Usando ARPspoof [arpspoof]
+
+1° Passo: Habilitar encaminhamento de pacote
+	echo "1" > /proc/sys/net/ipv4/ip_forward
+2° Passo: Usar o comando arpspoof
+	arpspoof -i eth0 -t 192.168.18.47 192.168.18.1
+3° Passo: Utilizar os mesmo procedimentos com valores invertos 
+	arpspoof -i eth0 -t 192.168.18.1 192.168.18.47
+	
+
+Usando DNSspoof [dnsspoof]
+
+1° Primeiro e unico passo
+	bettercap -I eth0 -G 192.168.18.1 -T 192.168.18.157 --dns hosts.conf
+	
+Interceptando pesquisas HTTP [ARPSpoof + MITMProxy]
+Primeiros comandos:
+	iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+	iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 443 -j REDIRECT --to-port 8080
+
+
+
+
+1° Passo
+	echo "1" > /proc/sys/net/ipv4/ip_forward
+2° Passo
+	arpspoof -i eth0 -t 192.168.18.1 192.168.18.47
+3° Passo 
+	arpspoof -i eth0 -t 192.168.18.47 192.168.18.1
+
+
+Parte 2: MITMProxy
+
+1° Passo:
+	mitmproxy --mode transparent --showhost
+
+- Testar novamente quando tiver um adaptador Wireless
+
+Clonando página [SETOOKIT]
+
+ - Muito fácil, é só ler
+		
+
+
+
+	
